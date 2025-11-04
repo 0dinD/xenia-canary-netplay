@@ -1102,7 +1102,8 @@ bool xeDrawFriendContent(xe::ui::ImGuiDrawer* imgui_drawer,
     ImGui::PushStyleColor(ImGuiCol_HeaderHovered, IM_COL32(50, 100, 200, 50));
     ImGui::PushStyleColor(ImGuiCol_HeaderActive, IM_COL32(0, 0, 0, 0));
     if (ImGui::Selectable(selectable_label.c_str(), false,
-                          ImGuiSelectableFlags_None, selectable_area)) {
+                          ImGuiSelectableFlags_NoAutoClosePopups,
+                          selectable_area)) {
       *selected_xuid_ = friend_xuid;
     }
     ImGui::PopStyleColor(2);
@@ -1219,24 +1220,32 @@ bool xeDrawAddFriend(xe::ui::ImGuiDrawer* imgui_drawer, UserProfile* profile,
                                  ImGuiInputTextFlags_CharsUppercase);
     ImGui::PopItemWidth();
 
-    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
-      ImGui::SetTooltip("Right Click");
-    }
-
     ImVec2 drawing_end_position = ImGui::GetCursorPos();
 
     ImGui::SetCursorPos(drawing_start_position);
+
+    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) {
+      ImGui::SetTooltip("Right Click/Gamepad A");
+    }
+
+    if (ImGui::IsItemFocused() &&
+        ImGui::IsKeyPressed(ImGuiKey::ImGuiKey_GamepadFaceDown, false)) {
+      ImGui::OpenPopup("##AddFriendContexts");
+    }
 
     auto selectable_area =
         ImVec2(drawing_end_position.x - drawing_start_position.x,
                (drawing_end_position.y - drawing_start_position.y));
 
+    // Hide border for controllers
+    ImGui::PushStyleColor(ImGuiCol_NavCursor, IM_COL32(0, 0, 0, 0));
     ImGui::PushStyleColor(ImGuiCol_HeaderHovered, IM_COL32(0, 0, 0, 0));
     ImGui::PushStyleColor(ImGuiCol_HeaderActive, IM_COL32(0, 0, 0, 0));
     if (ImGui::Selectable("##SelectableAddFriend", false,
-                          ImGuiSelectableFlags_None, selectable_area)) {
+                          ImGuiSelectableFlags_NoAutoClosePopups,
+                          selectable_area)) {
     }
-    ImGui::PopStyleColor(2);
+    ImGui::PopStyleColor(3);
 
     if (ImGui::BeginPopupContextItem("##AddFriendContexts")) {
       if (ImGui::MenuItem("Paste")) {
@@ -1352,9 +1361,15 @@ bool xeDrawFriendsContent(xe::ui::ImGuiDrawer* imgui_drawer,
     ImGui::PushStyleColor(ImGuiCol_HeaderHovered, IM_COL32(0, 0, 0, 0));
     ImGui::PushStyleColor(ImGuiCol_HeaderActive, IM_COL32(0, 0, 0, 0));
     if (ImGui::Selectable("##SelectableFriends", false,
-                          ImGuiSelectableFlags_None, selectable_area)) {
+                          ImGuiSelectableFlags_NoAutoClosePopups,
+                          selectable_area)) {
+      ImGui::OpenPopup("##SearchFilter");
     }
     ImGui::PopStyleColor(2);
+
+    if (ImGui::IsItemHovered()) {
+      ImGui::SetTooltip("Right Click/Gamepad A");
+    }
 
     if (ImGui::BeginPopupContextItem("##SearchFilter")) {
       if (ImGui::MenuItem("Paste")) {
