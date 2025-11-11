@@ -55,6 +55,11 @@ struct X_KENUMERATOR_CONTENT_AGGREGATE {
 };
 static_assert_size(X_KENUMERATOR_CONTENT_AGGREGATE, 0x8);
 
+struct X_ENUMERATOR_ALLOC {
+  xe::be<uint32_t> enum_size;
+  xe::be<uint32_t> enum_ptr;
+};
+
 class XEnumerator : public XObject {
  public:
   static const XObject::Type kObjectType = XObject::Type::Enumerator;
@@ -69,15 +74,15 @@ class XEnumerator : public XObject {
 
   X_STATUS Initialize(uint32_t user_index, uint32_t app_id,
                       uint32_t open_message, uint32_t close_message,
-                      uint32_t flags);
+                      uint32_t flags, uint32_t extra_size);
 
   template <typename T>
   X_STATUS Initialize(uint32_t user_index, uint32_t app_id,
                       uint32_t open_message, uint32_t close_message,
-                      uint32_t flags, T** extra) {
+                      uint32_t flags, uint32_t extra_size, T** extra) {
     void* dummy;
     auto result = Initialize(user_index, app_id, open_message, close_message,
-                             flags, static_cast<uint32_t>(sizeof(T)), &dummy);
+                             flags, extra_size, &dummy);
     if (extra) {
       *extra = XFAILED(result) ? nullptr : static_cast<T*>(dummy);
     }
@@ -93,6 +98,7 @@ class XEnumerator : public XObject {
  private:
   size_t items_per_enumerate_;
   size_t item_size_;
+  size_t private_enum_size_;
 };
 
 class XStaticUntypedEnumerator : public XEnumerator {

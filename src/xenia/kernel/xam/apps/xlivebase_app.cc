@@ -621,7 +621,7 @@ X_HRESULT XLiveBaseApp::XPresenceCreateEnumerator(uint32_t buffer_ptr,
 
   auto e = make_object<XStaticEnumerator<X_ONLINE_PRESENCE>>(kernel_state_,
                                                              num_peers);
-  auto result = e->Initialize(user_index, app_id(), 0x5801A, 0x5801B, 0);
+  auto result = e->Initialize(user_index, app_id(), 0x5801A, 0x5801B, 0, 0x330);
 
   if (XFAILED(result)) {
     return result;
@@ -927,7 +927,7 @@ X_HRESULT XLiveBaseApp::XFriendsCreateEnumerator(uint32_t buffer_ptr,
 
   auto e = make_object<XStaticEnumerator<X_ONLINE_FRIEND>>(kernel_state_,
                                                            friends_amount);
-  auto result = e->Initialize(-1, app_id(), 0x58021, 0x58022, 0);
+  auto result = e->Initialize(-1, app_id(), 0x58021, 0x58022, 0, 0x10);
 
   if (XFAILED(result)) {
     return result;

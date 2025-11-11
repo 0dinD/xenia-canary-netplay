@@ -713,7 +713,7 @@ dword_result_t XamUserCreateAchievementEnumerator_entry(
 
   auto e = object_ref<XAchievementEnumerator>(
       new XAchievementEnumerator(kernel_state(), count, flags));
-  auto result = e->Initialize(user_index, 0xFB, 0xB000A, 0xB000B, 0);
+  auto result = e->Initialize(user_index, 0xFB, 0xB000A, 0xB000B, 0, 0x28);
   if (XFAILED(result)) {
     return result;
   }
@@ -779,8 +779,7 @@ dword_result_t XamUserCreateTitlesPlayedEnumerator_entry(
 
   auto e = object_ref<XTitleEnumerator>(
       new XTitleEnumerator(kernel_state(), game_count));
-  auto result =
-      e->Initialize(user_index, 0xFB, 0xB0050, 0xB000B, 0x20, game_count, 0);
+  auto result = e->Initialize(user_index, 0xFB, 0xB0050, 0xB000B, 0, 0x20);
   if (XFAILED(result)) {
     return result;
   }
@@ -1230,8 +1229,8 @@ dword_result_t XamUserCreateStatsEnumerator_entry(
 
   auto e = new XStaticEnumerator<X_USER_STATS_READ_RESULTS>(kernel_state(), 1);
 
-  const X_STATUS result =
-      e->Initialize(XUserIndexNone, 0xFB, 0xB0023, 0xB0024, 0);
+  const X_STATUS result = e->Initialize(XUserIndexNone, 0xFB, 0xB0023, 0xB0024,
+                                        0, 0x8C * num_stats_specs + 0x20);
 
   if (XFAILED(result)) {
     return result;
