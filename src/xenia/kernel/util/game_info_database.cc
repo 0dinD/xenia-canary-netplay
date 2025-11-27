@@ -185,6 +185,8 @@ GameInfoDatabase::StatsView GameInfoDatabase::GetStatsView(
     const uint32_t id) const {
   StatsView stats_view = {};
 
+  stats_view.view.id = xam::kInvalidPropertyId;
+
   if (!is_valid_) {
     return stats_view;
   }
