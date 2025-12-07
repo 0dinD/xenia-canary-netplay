@@ -1910,7 +1910,9 @@ void XLiveAPI::DiscoverNetworkInterfaces() {
        adapter_ptr = adapter_ptr->Next) {
     if (adapter_ptr->OperStatus == IfOperStatusUp &&
         (adapter_ptr->IfType == IF_TYPE_IEEE80211 ||
-         adapter_ptr->IfType == IF_TYPE_ETHERNET_CSMACD)) {
+         adapter_ptr->IfType == IF_TYPE_ETHERNET_CSMACD ||
+         adapter_ptr->IfType == IF_TYPE_PROP_VIRTUAL ||
+         adapter_ptr->IfType == IF_TYPE_TUNNEL)) {
       if (adapter_ptr->PhysicalAddress != nullptr) {
         for (PIP_ADAPTER_UNICAST_ADDRESS_LH adapater_address =
                  adapter_ptr->FirstUnicastAddress;
